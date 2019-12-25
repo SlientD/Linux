@@ -11,6 +11,12 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <string.h>
+//c++标准库做法进行字符串分隔
+//#include <sstream>
+//基于boost的方案比较科学
+//boost algorithm/string.cpp
+//boost::split
+
 int Split(char input[],char *output[]){
     //函数strtoke
     //strtoke(str,"分隔符集合"）
@@ -67,3 +73,20 @@ int main(){
 
     }
 }
+
+//改进
+//1.自动获取用户名，主机名，当前路径
+//2.需要支持cd命令：为什么我们的不支持？因为cd修改的是子进程路径，对父进程没有影响。解决方法：让父进程直接替换为cd，而不是让子进程去替换，cd是内建命令，让我们的进程支持内建命令
+//3.ll等别名不支持。。。因而要让我们的shell支持别名，即让他维护一个映射关系--》键值对
+//4.不支持管道
+//5.支持重定向到文件
+
+
+
+
+
+
+
+
+
+
