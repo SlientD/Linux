@@ -1,0 +1,8 @@
+hellofd1=3
+ret=9
+ret=9
+arr=linuxtest
+hellofd1=3
+ret=9
+ret=9
+arr=linuxtest
