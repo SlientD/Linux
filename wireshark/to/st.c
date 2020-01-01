@@ -54,7 +54,8 @@ void processPacket(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_char *
     {
         printf("Options Set ERRO!\n");                        
     }
-    conn_ptr = mysql_real_connect(conn_ptr,"192.168.0.194","root","root","packet",0,NULL    ,0);//连接MySQ      L testdb数据库
+    conn_ptr = mysql_real_connect(conn_ptr,"192.168.43.78","root","root","packet",0,NULL    ,0);//连接MySQ      L testdb数据库
+
     if(conn_ptr)
     {                                                               
         printf("Connection Succeed!\n");
@@ -78,13 +79,11 @@ void processPacket(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_char *
             printf("\n");                                                                               
     }
     printf("\n\n");
-    printf("transInProcess=%s\n\n",trans);
+//    printf("transInProcess=%s\n\n",trans);
     memset(sql_insert,0,MAXRECVLEN);
     
     sprintf(sql_insert,"insert into Info(time,packet) VALUES(now(),'%s');",trans);
-    printf("%s\n", sql_insert);
     ret=mysql_query(conn_ptr,sql_insert);
-   //printf("hhhhh\n");
  
     
     if(!ret)
@@ -95,7 +94,7 @@ void processPacket(u_char *arg, const struct pcap_pkthdr *pkthdr, const u_char *
    {
        printf("Connect Erro:%d %s\n",mysql_errno(conn_ptr),mysql_error(conn_ptr));//返回错误代码、错误消息
    }
-   //usleep(600000);
+   usleep(600000);
    mysql_close(conn_ptr);
 }
 
@@ -116,11 +115,16 @@ int Get()
     }
     for(d= alldevs; d != NULL; d= d->next)                                
     {
-        if(strcmp(d->name,"ens33")==0)
-        {   
-            printf("%d. %s", ++i, d->name);
-            break;
-        }
+        printf("%d. %s\n", ++i, d->name);
+    }
+    char getPort[32];
+    gets(getPort);
+    for(d= alldevs; d != NULL; d= d->next)
+    {if(strcmp(d->name,getPort)==0)
+           {   
+               printf("%d. %s", ++i, d->name);
+               break;
+           } 
     }
     devStr=d->name;
     if (devStr)
