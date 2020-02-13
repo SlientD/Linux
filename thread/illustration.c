@@ -118,6 +118,7 @@ int main(){
 //具体多个线程合适？没有准确答案，由于线程也要分cou密集型和io密集型，要看CPU/IO密集型任务的比重，毕竟IO密集型任务不占用cpu
 #endif
 
+#if 0
 //Q4:通过多线程提高程序效率：
 //解决问题：一个很大的数组，把数组的每个元素都进行乘方运算再放回数组
 #include <sys/time.h> 
@@ -178,7 +179,76 @@ int main(){
 
     return 0;
 }
+#endif
 
+#if 0
+int g_count=0;
+//互斥量，互斥锁
+pthread_mutex_t mutex;//使用前一定要对其初始化
+void *Enter(void *arg){
+    int i;
+    for(i=0;i<50000;i++){
+        //如果当前锁正在被其他线程使用时，该线程会在lock处阻塞
+        pthread_mutex_lock(&mutex);
+        g_count++;
+        pthread_mutex_unlock(&mutex);
+    }
+    return NULL;
+}
+
+int main(){
+    pthread_mutex_init(&mutex,NULL);
+    pthread_t tid1,tid2;
+    pthread_create(&tid1,NULL,Enter,NULL);
+    pthread_create(&tid2,NULL,Enter,NULL);
+    pthread_join(tid1,NULL);
+    pthread_join(tid1,NULL);
+    printf("%d\n",g_count);
+    pthread_mutex_destroy(&mutex);
+    return 0;
+}
+#endif
+
+//黄牛抢票
+//
+#define THREAD_NUM 4
+int tickets=100;
+pthread_mutex_t mutex;
+void *ENTER(void *arg){
+    int *p=(int *)arg;
+    while(1){
+        pthread_mutex_lock(&mutex);
+        if(tickets>0){
+        printf("i am number %d,i get :%d\n",*p,tickets);
+        tickets--;
+        
+        }
+        else{
+        pthread_mutex_unlock(&mutex);
+            delete p;
+            p=NULL;
+            break;
+        }
+        pthread_mutex_unlock(&mutex);
+    }
+}
+int main(){
+  pthread_mutex_init(&mutex,NULL);
+  pthread_t tid[THREAD_NUM];
+  int i;
+  for(i=0;i<THREAD_NUM;i++){
+      int *p=new int;
+      *p=i;
+      pthread_create(&tid[i],NULL,ENTER,(void *)p);
+
+
+  }
+  for(i=0;i<THREAD_NUM;i++){
+      pthread_join(tid[i],NULL);
+  }
+  pthread_mutex_destroy(&mutex);
+  return 0;
+}
 
 
 

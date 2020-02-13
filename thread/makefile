@@ -1,2 +1,2 @@
-illustration:illustration.c
-	gcc $^ -o $@ -lpthread -g
+sem:sem.cpp
+	g++ $^ -o $@ -lpthread -g
