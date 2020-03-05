@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <stdlib.h>
 #include <iostream>
 #include <cstdio>
 #include <sys/socket.h>
@@ -11,7 +12,9 @@ class UdpSvr{
         UdpSvr(){
             _Sock=-1;
         }
-        ~UdpSvr();
+        ~UdpSvr(){
+            _Sock=-1;
+        }
 
         //创建套接字
         bool createSockt(){
